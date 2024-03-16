@@ -1,0 +1,44 @@
+
+#nbLignes <fic>
+
+nbLignes() {
+    local fic=$1
+    local nb_lignes=$(wc -l < "$fic")
+    echo $nb_lignes
+}
+
+#nbChamps <fic>
+
+nbChamps() {
+    local fic=$1
+    nb_colonnes=$(head -n 1 fic | awk -F':' '{print NF}')
+    echo $nb_colonnes
+}
+
+#alea <min> <max>
+
+alea() {
+    local min=$1
+    local max=$2
+}
+
+#niemeLigne <fic> <n>
+
+niemeLigne() {
+    local fic=$1
+    local n=$2
+}
+
+#niemeChamp <chaine> <n>
+
+niemeChamp() {
+    local chaine=$1
+    local n=$2
+}
+
+#entete <fic> <numCol>
+
+entete() {
+    local fic=$1
+    local numCol=$2
+}

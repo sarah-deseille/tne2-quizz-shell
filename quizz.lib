@@ -42,3 +42,11 @@ entete() {
     local fic=$1
     local numCol=$2
 }
+
+#afficher les champs d'un fic
+#afficherChamps <fic>
+
+afficherChamps() {
+    local fic=$1
+    echo $(head -1 $fic)
+}

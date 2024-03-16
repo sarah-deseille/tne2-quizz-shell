@@ -52,8 +52,21 @@ HERE
         if [ $opt_f == 'false' ] #comparaison de chaînes
         then
         #afficher le résultat de l'exécution d'une commande ->$() : exécute la commande et retourne le résultat
-            echo -e -n "$(ls -1 $PATH_DIR | grep .txt | nl )\n" #ls -1 : affiche les noms des fic.txt seulement 
+            #echo -e -n "$(ls -1 $PATH_DIR | grep .txt | nl )\n" #ls -1 : affiche les noms des fic.txt seulement 
             #echo -e : echo ne met pas de retour à la ligne et echo -n interpréte les caractères spéciaux
+
+            OLDIFS=$IFS #sauvegarde de la valeur de IFS, IFS = Internal Field Separator (variable interne)
+            IFS=$'\n' #IFS est un caractère de séparation interne
+            
+            for file in $(ls -1 $PATH_DIR | grep .txt | nl );do
+                filename=$(echo $file | tr -s " " '\t' | cut -f3) #découpe la chaîne en fonction du séparateur et retourne le champ n°3 soit le nom ex; 1 departements.txt -> renvoie departements.txt
+                #tr supprime les espaces qui se suivent et les remplace par une tabulation
+                #cut -f3 : retourne le champ n°3 et considère par défaut le séparateur \t
+                listechamps=$(afficherChamps "$filename")
+                echo -e -n "$file $listechamps\n"
+            done
+
+            IFS=$OLDIFS #restauration de la valeur de IFS
         fi
         ;;
 

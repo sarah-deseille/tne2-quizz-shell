@@ -4,6 +4,8 @@ SEPARATOR=":" #séparateur par défaut
 FILE_EXIST=false #fichier par défaut inexistant
 DIR_EXIST=false #répertoire par défaut inexistant
 opt_f=false #option -f non utilisée
+opt_r=false #option -r non utilisée
+opt_q=false #option -q non utilisée
 
 # gestion des options avec getopts
 while getopts "d:f:hp:q:r:sv" opt; do
@@ -73,11 +75,13 @@ HERE
     #indique le numéro de la colonne question
     q)
         NUMBER_COLUMNS_QUESTION=$OPTARG
+        opt_q=true
         ;;
     
     #indique le numéro de la colonne réponse
     r)
         NUMBER_COLUMNS_ANSWER=$OPTARG
+        opt_r=true
         ;;
 
     #affiche les meilleurs scores triés + pseudo + nb points

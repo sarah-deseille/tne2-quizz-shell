@@ -52,7 +52,7 @@ HERE
         if [ $opt_f == 'false' ] #comparaison de chaînes
         then
         #afficher le résultat de l'exécution d'une commande ->$() : exécute la commande et retourne le résultat
-            echo -e -n "$(ls -1 $PATH_DIR | grep .txt )\n" #ls -1 : affiche les noms des fic.txt seulement 
+            echo -e -n "$(ls -1 $PATH_DIR | grep .txt | nl )\n" #ls -1 : affiche les noms des fic.txt seulement 
             #echo -e : echo ne met pas de retour à la ligne et echo -n interpréte les caractères spéciaux
         fi
         ;;

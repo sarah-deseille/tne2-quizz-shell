@@ -12,8 +12,8 @@ while getopts "d:f:hp:q:r:sv" opt; do
         ;;
     #indique le fichier de données à utiliser
     f)
-        PATH_FILE=$OPTARG
-        if [ -e $PATH_FILE ] #vérifier l'existence d'un fichier 
+        DATA_FILE=$OPTARG
+        if [ -e $DATA_FILE ] #vérifier l'existence d'un fichier 
         then
             FILE_EXIST=true
         else
@@ -39,6 +39,7 @@ HERE
     #indique le répertoire fic. de données
     p)
         PATH_DIR=$OPTARG
+
         ;;
 
     #indique le numéro de la colonne question

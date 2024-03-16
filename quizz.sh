@@ -103,3 +103,17 @@ HERE
     ;;
     esac
 done
+
+#est ce que le séparateur défini est bien présent dans le fichier de données ?
+#head -1 : affiche la première ligne du fichier
+#grep -q : ne pas afficher les résultats, si le résultat est trouvé retour 0
+if head -1 $DATA_FILE | grep -v -q "$SEPARATOR" # $? : retourne le code de sortie de la dernière commande exécutée
+#on veut ne pas trouver le séparateur
+then
+    echo "Le séparateur n'est pas présent dans le fichier" >&2
+    exit 1
+fi
+#head -1 $DATA_FILE | grep -q $SEPARATOR  #grep -q : ne pas afficher les résultats, si le résultat est trouvé retour 0
+# "" : interprétation de la var
+
+

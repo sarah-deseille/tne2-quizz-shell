@@ -2,6 +2,7 @@
 source quizz.lib
 SEPARATOR=":" #séparateur par défaut
 FILE_EXIST=false #fichier par défaut inexistant
+DIR_EXIST=false #répertoire par défaut inexistant
 
 # gestion des options avec getopts
 while getopts "d:f:hp:q:r:sv" opt; do
@@ -39,7 +40,13 @@ HERE
     #indique le répertoire fic. de données
     p)
         PATH_DIR=$OPTARG
-
+        if [ -d $PATH_DIR ]
+        then 
+            DIR_EXIST=true
+        else
+            echo "Le répertoire n'existe pas" >&2
+            exit 1
+        fi
         ;;
 
     #indique le numéro de la colonne question

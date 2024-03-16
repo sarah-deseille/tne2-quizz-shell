@@ -15,7 +15,7 @@ while getopts "d:f:hp:q:r:sv" opt; do
         PATH_FILE=$OPTARG
         if [ -e $PATH_FILE ] #vérifier l'existence d'un fichier 
         then
-            $FILE_EXIST=true
+            FILE_EXIST=true
         else
             echo "Le fichier n'existe pas" >&2
             exit 1

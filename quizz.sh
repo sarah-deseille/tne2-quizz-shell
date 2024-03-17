@@ -182,14 +182,25 @@ do
     fi
 
     #afficher la question
-    selectLignes "$PATH_DIR/$DATA_FILE" 
-    echo "Question : $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_QUESTION)"
+    ligneChoisit=$(selectLignes "$PATH_DIR/$DATA_FILE")
+    questionChoisit=$(niemeChamp "$ligneChoisit" $NUMBER_COLUMNS_QUESTION $SEPARATOR)
+    objetQuestionChoisit=$(entete "$PATH_DIR/$DATA_FILE" $NUMBER_COLUMNS_ANSWER $SEPARATOR)
+    reponseQuestion=$(niemeChamp "$ligneChoisit" $NUMBER_COLUMNS_ANSWER $SEPARATOR)
+
+    echo "Question : $questionChoisit a pour $objetQuestionChoisit"
+   
     #saisir la réponse
     read -p "Votre réponse : " REPONSE
+
     #afficher la réponse
-    echo "Réponse : $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_ANSWER)"
+    #afficher le mode verbeux
+    if [ $opt_v == 'true' ]
+    then
+        echo "Réponse : $reponseQuestion"
+    fi
+    
     #vérifier la réponse
-    if [ $REPONSE == $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_ANSWER) ]
+    if [ $REPONSE == $reponseQuestion ]
     then
         echo "Bonne réponse"
     else

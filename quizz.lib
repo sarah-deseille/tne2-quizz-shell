@@ -43,13 +43,18 @@ niemeChamp() {
     local n=$2
     local sep=$3
 
+    #afficher le champ au numéro de champ indiqué
+    echo $(echo $chaine | cut -d"$sep" -f$n) #-f : fieldnumber
+
 }
 
-#entete <fic> <numCol>
-
+#entete <fic> <numCol> <separateur>
+#but : afficher l'entete du fichier
 entete() {
     local fic=$1
     local numCol=$2
+    local separateur=$3
+    echo $(head -1 $fic | cut -d"$separateur" -f$numCol)
 }
 
 #afficher les champs d'un fic

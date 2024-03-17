@@ -7,6 +7,7 @@ DIR_EXIST=false #répertoire par défaut inexistant
 opt_f=false #option -f non utilisée
 opt_r=false #option -r non utilisée
 opt_q=false #option -q non utilisée
+opt_v=false #option -v non utilisée
 
 # gestion des options avec getopts
 while getopts "d:f:hp:q:r:sv" opt; do
@@ -91,6 +92,7 @@ HERE
 
     #mode verbeux : affiche les réponses à saisir
     v)
+        opt_v=true
         ;;
 
     \?) #passe ici quand l'option n'est pas reconnue
@@ -118,11 +120,12 @@ fi
 #head -1 $DATA_FILE | grep -q $SEPARATOR  #grep -q : ne pas afficher les résultats, si le résultat est trouvé retour 0
 # "" : interprétation de la var
 
+#nombre de champs du fichier
+MAXCHAMPS=$(nbChamps "$PATH_DIR/$DATA_FILE" $SEPARATOR)
+
 #vérifier que les options -q et -r sont utilisées
-if [ $opt_q == 'false' ] && [ $opt_r == 'false' ]
+if [ $opt_q == 'false' ] && [ $opt_r == 'false' ] 
 then
-    #nombre de champs du fichier
-    MAXCHAMPS=$(nbChamps "$PATH_DIR/$DATA_FILE" $SEPARATOR)
     NUMBER_COLUMNS_QUESTION=$(alea 1 $MAXCHAMPS) #considère que le min sera 1
 
     #init condition - forcer rentrer dans la boucle while
@@ -135,8 +138,69 @@ then
     done
     echo "Question : $NUMBER_COLUMNS_QUESTION Réponse : $NUMBER_COLUMNS_ANSWER"
 
+elif [ $opt_q == 'false' ] && [ $opt_r == 'true' ] #cas où la question n'est pas définie et la réponse définie
+then
+    VAL_REPONSE=$NUMBER_COLUMNS_ANSWER #récup la valeur du champs réponse entrée par l'utilisateur
+    #vérifier que VAL_REPONSE <= MAXCHAMPS
+    if [ $VAL_REPONSE -gt $MAXCHAMPS ]
+    then
+        echo "Le numéro de la colonne réponse est supérieur au nombre de colonnes du fichier" >&2
+        exit 1
+    fi
+    NUMBER_COLUMNS_QUESTION=$NUMBER_COLUMNS_ANSWER
+    while [ $NUMBER_COLUMNS_QUESTION -eq $VAL_REPONSE ]
+    do
+        NUMBER_COLUMNS_QUESTION=$(alea 1 $MAXCHAMPS)
+    done
+    echo "Question : $NUMBER_COLUMNS_QUESTION Réponse : $NUMBER_COLUMNS_ANSWER"
+
+elif [ $opt_q == 'true' ] && [ $opt_r == 'false' ] #cas où la question est définie et la réponse non définie
+then
+    VAL_QUESTION=$NUMBER_COLUMNS_QUESTION #récup la valeur du champs question entrée par l'utilisateur
+    #vérifier que VAL_QUESTION<= MAXCHAMPS
+    if [ $VAL_QUESTION -gt $MAXCHAMPS ]
+    then
+        echo "Le numéro de la colonne question est supérieur au nombre de colonnes du fichier" >&2
+        exit 1
+    fi
+    NUMBER_COLUMNS_ANSWER=$NUMBER_COLUMNS_QUESTION
+    while [ $NUMBER_COLUMNS_ANSWER -eq $VAL_QUESTION ]
+    do
+        NUMBER_COLUMNS_ANSWER=$(alea 1 $MAXCHAMPS)
+    done
+    echo "Question : $NUMBER_COLUMNS_QUESTION Réponse : $NUMBER_COLUMNS_ANSWER"
+
 fi
 
+#jeu de quizz
+while true
+do 
+    #afficher le mode verbeux
+    if [ $opt_v == 'true' ]
+    then
+        echo "Question : $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_QUESTION)"
+    fi
 
+    #afficher la question
+    selectLignes "$PATH_DIR/$DATA_FILE" 
+    echo "Question : $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_QUESTION)"
+    #saisir la réponse
+    read -p "Votre réponse : " REPONSE
+    #afficher la réponse
+    echo "Réponse : $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_ANSWER)"
+    #vérifier la réponse
+    if [ $REPONSE == $(afficherChamps $DATA_FILE $SEPARATOR $NUMBER_COLUMNS_ANSWER) ]
+    then
+        echo "Bonne réponse"
+    else
+        echo "Mauvaise réponse"
+    fi
+    #continuer ou arrêter
+    read -p "Continuer (o/n) ? " CONTINUER
+    if [ $CONTINUER == 'n' ]
+    then
+        break
+    fi
+done
 
 

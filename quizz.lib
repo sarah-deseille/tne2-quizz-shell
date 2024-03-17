@@ -30,13 +30,19 @@ alea() {
 niemeLigne() {
     local fic=$1
     local n=$2
+
+    #afficher la ligne au numéro de ligne indiquée
+    echo $(sed -n "${n}p" $fic)
+
 }
 
-#niemeChamp <chaine> <n>
+#niemeChamp <chaine> <n> <sep>
 
 niemeChamp() {
     local chaine=$1
     local n=$2
+    local sep=$3
+
 }
 
 #entete <fic> <numCol>
@@ -52,4 +58,14 @@ entete() {
 afficherChamps() {
     local fic=$1
     echo $(head -1 $fic)
+}
+
+#selectLignes <fic>
+
+selectLignes() {
+    local fic=$1
+    local minLignes=2 #car premier ligne header
+    local maxLignes=$(nbLignes $fic)
+    local numLigneChoisit=$(alea $minLignes $maxLignes) #numero de la ligne choisit
+    echo $(niemeLigne $fic $numLigneChoisit)
 }

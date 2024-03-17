@@ -7,11 +7,12 @@ nbLignes() {
     echo $nb_lignes
 }
 
-#nbChamps <fic>
+#nbChamps <fic> <separateur>
 
 nbChamps() {
     local fic=$1
-    nb_colonnes=$(head -n 1 fic | awk -F':' '{print NF}')
+    local separateur=$2
+    nb_colonnes=$(head -n 1 $fic | awk -F"$separateur" '{print NF}')
     echo $nb_colonnes
 }
 
@@ -20,6 +21,8 @@ nbChamps() {
 alea() {
     local min=$1
     local max=$2
+    #echo "min=$min max=$max"
+    echo $(($min + RANDOM % $max))
 }
 
 #niemeLigne <fic> <n>

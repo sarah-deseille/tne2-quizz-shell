@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 source quizz.lib
 SEPARATOR=":" #séparateur par défaut
+PATH_DIR="." #répertoire par défaut
 FILE_EXIST=false #fichier par défaut inexistant
 DIR_EXIST=false #répertoire par défaut inexistant
 opt_f=false #option -f non utilisée
@@ -67,8 +68,8 @@ HERE
                 listechamps=$(afficherChamps "$filename")
                 echo -e -n "$file $listechamps\n"
             done
-
             IFS=$OLDIFS #restauration de la valeur de IFS
+            exit 0 #sortie du script
         fi
         ;;
 
@@ -104,6 +105,7 @@ HERE
     esac
 done
 
+
 #est ce que le séparateur défini est bien présent dans le fichier de données ?
 #head -1 : affiche la première ligne du fichier
 #grep -q : ne pas afficher les résultats, si le résultat est trouvé retour 0
@@ -115,5 +117,26 @@ then
 fi
 #head -1 $DATA_FILE | grep -q $SEPARATOR  #grep -q : ne pas afficher les résultats, si le résultat est trouvé retour 0
 # "" : interprétation de la var
+
+#vérifier que les options -q et -r sont utilisées
+if [ $opt_q == 'false' ] && [ $opt_r == 'false' ]
+then
+    #nombre de champs du fichier
+    MAXCHAMPS=$(nbChamps "$PATH_DIR/$DATA_FILE" $SEPARATOR)
+    NUMBER_COLUMNS_QUESTION=$(alea 1 $MAXCHAMPS) #considère que le min sera 1
+
+    #init condition - forcer rentrer dans la boucle while
+    NUMBER_COLUMNS_ANSWER=$NUMBER_COLUMNS_QUESTION
+
+    #trouver NUMBER_COLUMNS_ANSWER différent de NUMBER_COLUMNS_QUESTION
+    while [ $NUMBER_COLUMNS_ANSWER -eq $NUMBER_COLUMNS_QUESTION ]
+    do
+        NUMBER_COLUMNS_ANSWER=$(alea 1 $MAXCHAMPS)
+    done
+    echo "Question : $NUMBER_COLUMNS_QUESTION Réponse : $NUMBER_COLUMNS_ANSWER"
+
+fi
+
+
 
 

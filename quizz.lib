@@ -75,35 +75,14 @@ selectLignes() {
     echo $(niemeLigne $fic $numLigneChoisit)
 }
 
-#uptdatePseudoScore <pseudo> <points>
-uptdatePseudoScore() {
-    local pseudo=$1
-    local points=$2
-    #recup score actuel 
-    local currentPoints=$(cat .$pseudo.txt)
-    #mise à jour du score
-    local newPoints=$(($currentPoints + $points))
-    #mise à jour du fichier
-    echo $newPoints > .$pseudo.txt
-}
 
-#showScore <pseudo> afficher le score d'un joueur
-showScore() {
-    local pseudo=$1
-    local score=$(cat .$pseudo.txt)
-    echo "Votre score est de $score points"
+#hallOfFame <rep> afficher les scores
+hallOfFame() {
+    local fic=$1
+    echo "Hall of Fame"
+    echo "============"
+    echo "Pseudo | Score"
+    echo "============"
+    cat $fic | sort -n -r -t" " -k2
+    
 }
-
-#hallOfFame <rep> afficher les meilleurs scores
-# hallOfFame() {
-#     local rep=$1
-#     echo "Hall of Fame"
-#     echo "============"
-#     echo "Pseudo | Score"
-#     echo "============"
-#     for pseudo in $rep
-#     do
-#         local score=$(cat .$pseudo.txt)
-#         echo "$pseudo | $score"
-#     done
-# }

@@ -8,6 +8,18 @@ opt_f=false #option -f non utilisée
 opt_r=false #option -r non utilisée
 opt_q=false #option -q non utilisée
 opt_v=false #option -v non utilisée
+NBPOINT_PSEUDO=0 #nombre de points du joueur
+
+#demander le pseudo du joueur
+read -p "Entrez votre pseudo : " PSEUDO
+#echo "Bonjour $PSEUDO"<&2
+if [ -e .$PSEUDO.txt ] #-e : tester si un fichier existe
+then
+    NBPOINT_PSEUDO=$(cat .$PSEUDO.txt) #mettre à jour le nb de points du joueur
+else
+    echo $NBPOINT_PSEUDO > .$PSEUDO.txt #init. du fichier du joueur avec un nb de points == 0
+fi
+#mettre un point pour créer un fic caché
 
 # gestion des options avec getopts
 while getopts "d:f:hp:q:r:sv" opt; do
@@ -203,9 +215,12 @@ do
     if [ $REPONSE == $reponseQuestion ]
     then
         echo "Bonne réponse"
+        uptdatePseudoScore $PSEUDO 1 #on ajoute 1 à chaque bone réponse
     else
         echo "Mauvaise réponse"
     fi
+    #afficher le nb d points du joueur
+    echo $(showScore $PSEUDO)
     #continuer ou arrêter
     read -p "Continuer (o/n) ? " CONTINUER
     if [ $CONTINUER == 'n' ]
